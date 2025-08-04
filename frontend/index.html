@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>家庭厨房 - 点餐系统</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 登录页面 -->
+    <div id="loginPage" class="page active">
+        <div class="login-container">
+            <div class="logo">
+                <h1>🍽️ 家庭厨房</h1>
+                <p>让家人点餐更简单</p>
+            </div>
+            <div class="login-form">
+                <select id="userSelect" class="user-select">
+                    <option value="">请选择家庭成员</option>
+                </select>
+                <button id="loginBtn" class="login-btn">进入系统</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主应用页面 -->
+    <div id="mainApp" class="page">
+        <!-- 顶部导航 -->
+        <div class="top-bar">
+            <div class="user-info">
+                <img id="userAvatar" src="" alt="头像" class="avatar">
+                <span id="userName"></span>
+                <span id="userRole" class="role-badge"></span>
+            </div>
+            <button id="logoutBtn" class="logout-btn">退出</button>
+        </div>
+
+        <!-- 底部标签栏 -->
+        <div class="tab-bar">
+            <div class="tab-item active" data-tab="menu">
+                <span class="tab-icon">🍽️</span>
+                <span class="tab-text">菜单</span>
+            </div>
+            <div class="tab-item" data-tab="orders">
+                <span class="tab-icon">📋</span>
+                <span class="tab-text">订单</span>
+            </div>
+            <div class="tab-item chef-only" data-tab="kitchen">
+                <span class="tab-icon">👨‍🍳</span>
+                <span class="tab-text">厨房</span>
+            </div>
+            <div class="tab-item admin-only" data-tab="stats">
+                <span class="tab-icon">📊</span>
+                <span class="tab-text">统计</span>
+            </div>
+        </div>
+
+        <!-- 内容区域 -->
+        <div class="content">
+            <!-- 菜单页面 -->
+            <div id="menuTab" class="tab-content active">
+                <div class="page-header">
+                    <h2>今日菜单</h2>
+                    <p>选择您想要的美食</p>
+                </div>
+                <div id="menuList" class="menu-list">
+                    <!-- 菜品列表将动态加载 -->
+                </div>
+            </div>
+
+            <!-- 订单页面 -->
+            <div id="ordersTab" class="tab-content">
+                <div class="page-header">
+                    <h2>我的订单</h2>
+                    <p>查看订单状态</p>
+                </div>
+                <div id="ordersList" class="orders-list">
+                    <!-- 订单列表将动态加载 -->
+                </div>
+            </div>
+
+            <!-- 厨房页面 -->
+            <div id="kitchenTab" class="tab-content">
+                <div class="page-header">
+                    <h2>厨房管理</h2>
+                    <p>处理待制作订单</p>
+                </div>
+                <div class="kitchen-stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="pendingCount">0</div>
+                        <div class="stat-label">待处理</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="preparingCount">0</div>
+                        <div class="stat-label">制作中</div>
+                    </div>
+                </div>
+                <div id="kitchenOrders" class="kitchen-orders">
+                    <!-- 厨房订单将动态加载 -->
+                </div>
+            </div>
+
+            <!-- 统计页面 -->
+            <div id="statsTab" class="tab-content">
+                <div class="page-header">
+                    <h2>数据统计</h2>
+                    <p>查看系统运营情况</p>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="todayOrdersCount">0</div>
+                        <div class="stat-label">今日订单</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalPendingCount">0</div>
+                        <div class="stat-label">待处理订单</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 点餐弹窗 -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">选择菜品</h3>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="dish-info">
+                    <img id="modalImage" src="" alt="菜品图片">
+                    <div class="dish-details">
+                        <h4 id="modalDishName"></h4>
+                        <p id="modalDescription"></p>
+                        <p class="prep-time">⏱️ 预计 <span id="modalPrepTime"></span> 分钟</p>
+                        <p class="ingredients">🥬 食材：<span id="modalIngredients"></span></p>
+                    </div>
+                </div>
+                <div class="order-form">
+                    <div class="quantity-selector">
+                        <label>数量：</label>
+                        <button type="button" class="qty-btn" id="qtyMinus">-</button>
+                        <input type="number" id="quantity" value="1" min="1" max="10">
+                        <button type="button" class="qty-btn" id="qtyPlus">+</button>
+                    </div>
+                    <div class="note-input">
+                        <label for="orderNote">备注：</label>
+                        <textarea id="orderNote" placeholder="特殊要求或偏好..."></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmOrder" class="confirm-btn">确认下单</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 通知提示 -->
+    <div id="notification" class="notification">
+        <span id="notificationText"></span>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
