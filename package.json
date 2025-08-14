@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "node server/index.js",
     "start": "node server/index.js",
-    "init-db": "node server/init-db.js"
+    "init-db": "node server/init-db.js",
+    "test": "node --test",
+    "lint": "find frontend server tests -name '*.js' -print0 | xargs -0 -n1 node --check"
   },
   "keywords": [
     "family",
