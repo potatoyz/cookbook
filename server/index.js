@@ -53,6 +53,28 @@ app.get('/api/menu', (req, res) => {
   });
 });
 
+// 上传菜单
+app.post('/api/menu', (req, res) => {
+  const { name, description, image, preparation_time, ingredients } = req.body;
+
+  if (!name || !image) {
+    res.status(400).json({ success: false, error: '缺少必要参数' });
+    return;
+  }
+
+  db.run(
+    'INSERT INTO menu_items (name, description, image, preparation_time, ingredients, available) VALUES (?, ?, ?, ?, ?, 1)',
+    [name, description || '', image, preparation_time || 30, ingredients || ''],
+    function(err) {
+      if (err) {
+        res.status(500).json({ success: false, error: err.message });
+        return;
+      }
+      res.json({ success: true, data: { id: this.lastID } });
+    }
+  );
+});
+
 // 获取所有订单
 app.get('/api/orders', (req, res) => {
   const { role, userId } = req.query;

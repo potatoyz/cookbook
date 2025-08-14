@@ -3,6 +3,7 @@ let currentUser = null;
 let ws = null;
 let menuItems = [];
 let orders = [];
+let allUsers = [];
 
 // API 基础 URL
 const API_BASE = window.location.origin + '/api';
@@ -11,6 +12,7 @@ const API_BASE = window.location.origin + '/api';
 const loginPage = document.getElementById('loginPage');
 const mainApp = document.getElementById('mainApp');
 const userSelect = document.getElementById('userSelect');
+const roleFilter = document.getElementById('roleFilter');
 const loginBtn = document.getElementById('loginBtn');
 const logoutBtn = document.getElementById('logoutBtn');
 const userAvatar = document.getElementById('userAvatar');
@@ -45,21 +47,27 @@ async function loadUsers() {
     try {
         const response = await fetch(`${API_BASE}/users`);
         const result = await response.json();
-        
+
         if (result.success) {
-            const users = result.data;
-            userSelect.innerHTML = '<option value="">请选择家庭成员</option>';
-            
-            users.forEach(user => {
-                const option = document.createElement('option');
-                option.value = JSON.stringify(user);
-                option.textContent = `${user.name} (${getRoleText(user.role)})`;
-                userSelect.appendChild(option);
-            });
+            allUsers = result.data;
+            renderUserOptions(roleFilter.value);
         }
     } catch (error) {
         console.error('加载用户列表失败:', error);
     }
+}
+
+// 根据角色过滤渲染用户
+function renderUserOptions(role = '') {
+    userSelect.innerHTML = '<option value="">请选择家庭成员</option>';
+    allUsers
+        .filter(user => !role || user.role === role)
+        .forEach(user => {
+            const option = document.createElement('option');
+            option.value = JSON.stringify(user);
+            option.textContent = `${user.name} (${getRoleText(user.role)})`;
+            userSelect.appendChild(option);
+        });
 }
 
 // 获取角色文本
@@ -76,6 +84,9 @@ function getRoleText(role) {
 function setupEventListeners() {
     // 登录按钮
     loginBtn.addEventListener('click', handleLogin);
+
+    // 角色筛选
+    roleFilter.addEventListener('change', () => renderUserOptions(roleFilter.value));
     
     // 退出按钮
     logoutBtn.addEventListener('click', handleLogout);
@@ -104,6 +115,12 @@ function setupEventListeners() {
     
     // 确认下单
     document.getElementById('confirmOrder').addEventListener('click', handleConfirmOrder);
+
+    // 菜单上传
+    const menuForm = document.getElementById('menuForm');
+    if (menuForm) {
+        menuForm.addEventListener('submit', handleMenuUpload);
+    }
 }
 
 // 处理登录
@@ -249,6 +266,9 @@ function switchTab(tabName) {
         case 'stats':
             loadStats();
             break;
+        case 'upload':
+            // nothing to load
+            break;
     }
 }
 
@@ -348,6 +368,42 @@ async function handleConfirmOrder() {
     } catch (error) {
         console.error('下单失败:', error);
         showNotification('下单失败', 'error');
+    }
+}
+
+// 上传菜单
+async function handleMenuUpload(event) {
+    event.preventDefault();
+
+    const name = document.getElementById('menuName').value.trim();
+    const description = document.getElementById('menuDescription').value.trim();
+    const image = document.getElementById('menuImage').value.trim();
+    const preparationTime = parseInt(document.getElementById('menuPrepTime').value) || 30;
+    const ingredients = document.getElementById('menuIngredients').value.trim();
+
+    try {
+        const response = await fetch(`${API_BASE}/menu`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name,
+                description,
+                image,
+                preparation_time: preparationTime,
+                ingredients
+            })
+        });
+        const result = await response.json();
+        if (result.success) {
+            showNotification('菜品已上传', 'success');
+            event.target.reset();
+            loadMenuItems();
+        } else {
+            showNotification(result.error || '上传失败', 'error');
+        }
+    } catch (error) {
+        console.error('上传菜单失败:', error);
+        showNotification('上传失败', 'error');
     }
 }
 

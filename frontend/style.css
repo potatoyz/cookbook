@@ -602,6 +602,27 @@ body {
     transform: translateY(-2px);
 }
 
+/* 菜单上传表单 */
+.upload-form {
+    padding: 20px;
+}
+
+.upload-form input,
+.upload-form textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: inherit;
+}
+
+.upload-form textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
 /* 通知 */
 .notification {
     position: fixed;

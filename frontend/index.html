@@ -15,6 +15,12 @@
                 <p>让家人点餐更简单</p>
             </div>
             <div class="login-form">
+                <select id="roleFilter" class="user-select role-filter">
+                    <option value="">全部角色</option>
+                    <option value="member">家庭成员</option>
+                    <option value="chef">厨师</option>
+                    <option value="admin">管理员</option>
+                </select>
                 <select id="userSelect" class="user-select">
                     <option value="">请选择家庭成员</option>
                 </select>
@@ -52,6 +58,10 @@
             <div class="tab-item admin-only" data-tab="stats">
                 <span class="tab-icon">📊</span>
                 <span class="tab-text">统计</span>
+            </div>
+            <div class="tab-item admin-only" data-tab="upload">
+                <span class="tab-icon">➕</span>
+                <span class="tab-text">菜单管理</span>
             </div>
         </div>
 
@@ -116,6 +126,22 @@
                         <div class="stat-label">待处理订单</div>
                     </div>
                 </div>
+            </div>
+
+            <!-- 菜单管理页面 -->
+            <div id="uploadTab" class="tab-content">
+                <div class="page-header">
+                    <h2>上传菜单</h2>
+                    <p>添加新的菜品</p>
+                </div>
+                <form id="menuForm" class="upload-form">
+                    <input type="text" id="menuName" placeholder="菜品名称" required>
+                    <textarea id="menuDescription" placeholder="菜品描述"></textarea>
+                    <input type="url" id="menuImage" placeholder="图片URL" required>
+                    <input type="number" id="menuPrepTime" placeholder="制作时间(分钟)" min="1" value="30">
+                    <input type="text" id="menuIngredients" placeholder="食材（用逗号分隔）">
+                    <button type="submit" class="confirm-btn">上传</button>
+                </form>
             </div>
         </div>
     </div>
