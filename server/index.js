@@ -36,6 +36,7 @@ function broadcast(message) {
   clients.forEach(client => {
     if (client.readyState === WebSocket.OPEN) {
       client.send(JSON.stringify(message));
+      return;
     }
   });
 }
