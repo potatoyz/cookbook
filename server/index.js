@@ -37,6 +37,8 @@ function broadcast(message) {
     if (client.readyState === WebSocket.OPEN) {
       client.send(JSON.stringify(message));
       if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify(message));
+      }
         // Return here only exits this forEach callback for this client; broadcast continues for others
         client.send(JSON.stringify(message));
         return;
