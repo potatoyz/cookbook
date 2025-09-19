@@ -37,6 +37,7 @@ function broadcast(message) {
     if (client.readyState === WebSocket.OPEN) {
       client.send(JSON.stringify(message));
     }
+    }
   });
 }
 
