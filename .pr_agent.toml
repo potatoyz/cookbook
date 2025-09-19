@@ -1,0 +1,26 @@
+[config]
+response_language = "zh-CN"
+enable_custom_labels=true
+enable_comment_approval = true # For approval via comments
+enable_auto_approval = true   # For criteria-based auto-approval
+auto_approve_for_low_review_effort = 1
+
+[pr_help_docs]
+docs_path = "documents"
+repo_default_branch = "master"
+
+[custom_labels."pr-agent2"]
+description = "Always Add this label"
+
+[custom_labels."Not-Security"]
+description = "This MR has Security problem"
+
+[pr_to_ticket]
+default_project_key = "DEVOPS"
+fallback_to_git_provider_issues = true
+
+[pr_description]
+auto_create_ticket = true
+
+[pr_code_suggestions]
+wiki_page_accepted_suggestions = true
